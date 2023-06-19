@@ -1,0 +1,52 @@
+version: '3'
+services:
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: yourpassword
+      MYSQL_DATABASE: yourdatabase
+      MYSQL_USER: youruser
+      MYSQL_PASSWORD: yourpassword
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  airflow-webserver:
+    build:
+      context: airflow
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    environment:
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql+pymysql://youruser:yourpassword@mysql:3306/yourdatabase
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+    command: webserver
+    ports:
+      - "8080:8080"
+
+  airflow-scheduler:
+    build: 
+      context: airflow
+      dockerfile: Dockerfile
+    depends_on:
+      - airflow-webserver
+    environment:
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql+pymysql://youruser:yourpassword@mysql:3306/yourdatabase
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+    command: scheduler
+
+  superset:
+    image: apache/superset:latest
+    depends_on:
+      - mysql
+    ports:
+      - "8088:8088"
+    environment:
+      - DATABASE_DB=superset
+      - DATABASE_HOST=mysql
+      - DATABASE_PASSWORD=superset
+      - DATABASE_USER=superset
+      - SUPERSET_SECRET_KEY=TEST_NON_DEV_SECRET
+
+volumes:
+  mysql_data:
