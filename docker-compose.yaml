@@ -23,6 +23,8 @@ services:
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql+pymysql://youruser:yourpassword@mysql:3306/yourdatabase
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
     command: webserver
+    volumes:
+      - ./code:/code
     ports:
       - "8080:8080"
 
