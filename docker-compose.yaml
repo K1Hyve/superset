@@ -22,7 +22,6 @@ services:
     environment:
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql+pymysql://youruser:yourpassword@mysql:3306/yourdatabase
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__CORE__FERNET_KEY=""
       - AIRFLOW__WEBSERVER__SECRET_KEY="3762856349763892595"      
     command: webserver
     ports:
@@ -37,7 +36,6 @@ services:
     environment:
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql+pymysql://youruser:yourpassword@mysql:3306/yourdatabase
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__CORE__FERNET_KEY=""
       - AIRFLOW__WEBSERVER__SECRET_KEY="3762856349763892595"
     volumes:
       - ./code:/opt/airflow/dags/      
